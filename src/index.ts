@@ -1,1 +1,2 @@
-export { Map, MapProps } from './Map';
+export { OlMap, MapProps, SingleMap } from './Map';
+export * from './controls';

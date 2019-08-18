@@ -7,11 +7,6 @@
       "modules": true
     }
   },
-  "settings": {
-    "react": {
-      "version": "detect"
-    }
-  },
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
@@ -22,6 +17,11 @@
     "@typescript-eslint",
     "react"
   ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "rules": {
     "@typescript-eslint/indent": ["warn", 4],
     "@typescript-eslint/explicit-function-return-type": "off",
