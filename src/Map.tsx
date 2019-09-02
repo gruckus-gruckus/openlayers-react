@@ -33,6 +33,11 @@ export interface MapProps extends MapEvents {
 }
 
 
+export interface CurrentMapContextProps {
+    map: olMap;
+}
+export const CurrentMapContext = React.createContext<CurrentMapContextProps | null>(null);
+
 export interface MapContextProps {
     maps: Map<string, olMap>;
     registerMap: (map: olMap, id: string) => void;
@@ -87,8 +92,10 @@ export const OlMap = (props: MapProps) => {
     });
     
     return (
-        <div id={mapId} ref={mapElementRef}>
-            {props.children}
-        </div>
+        <CurrentMapContext.Provider value={{ map: mapObj }}>
+            <div id={mapId} ref={mapElementRef}>
+                {props.children}
+            </div>
+        </CurrentMapContext.Provider>
     );
 };
