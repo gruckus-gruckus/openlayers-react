@@ -1,34 +1,29 @@
-import React, { Ref } from 'react';
+import React from 'react';
 import olMap from 'ol/Map';
 import { MapOptions } from 'ol/PluggableMap';
 import { MapBrowserEvent, MapEvent } from 'ol';
 import { ObjectEvent } from 'ol/Object';
 import RenderEvent from 'ol/render/Event';
-
-export function getRandomInt(min: number, max: number): number {
-    const fmin = Math.ceil(min);
-    const fmax = Math.floor(max);
-    return Math.floor(Math.random() * (fmax - fmin)) + fmin;
-}
+import { getRandomInt } from './getRandomInt';
 
 export interface MapEvents {
-    onchange: (evt: Event) => void;
-    onchangeLayerGroup: (evt: ObjectEvent) => void;
-    onchangeSize: (evt: ObjectEvent) => void;
-    onchangeTarget: (evt: ObjectEvent) => void;
-    onchangeView: (evt: ObjectEvent) => void;
-    onclick: (evt: MapBrowserEvent) => void;
-    ondblclick: (evt: MapBrowserEvent) => void;
-    onmovestart: (evt: MapEvent) => void;
-    onmoveend: (evt: MapEvent) => void;
-    onpointerdrag: (evt: MapBrowserEvent) => void;
-    onpointermove: (evt: MapBrowserEvent) => void;
-    onpostcompose: (evt: RenderEvent) => void;
-    onpostrender: (evt: MapEvent) => void;
-    onprecompose: (evt: RenderEvent) => void;
-    onpropertychange: (evt: ObjectEvent) => void;
-    onrendercomplete: (evt: RenderEvent) => void;
-    onsingleclick: (evt: MapBrowserEvent) => void;
+    onchange?: (evt: Event) => void;
+    onchangeLayerGroup?: (evt: ObjectEvent) => void;
+    onchangeSize?: (evt: ObjectEvent) => void;
+    onchangeTarget?: (evt: ObjectEvent) => void;
+    onchangeView?: (evt: ObjectEvent) => void;
+    onclick?: (evt: MapBrowserEvent) => void;
+    ondblclick?: (evt: MapBrowserEvent) => void;
+    onmovestart?: (evt: MapEvent) => void;
+    onmoveend?: (evt: MapEvent) => void;
+    onpointerdrag?: (evt: MapBrowserEvent) => void;
+    onpointermove?: (evt: MapBrowserEvent) => void;
+    onpostcompose?: (evt: RenderEvent) => void;
+    onpostrender?: (evt: MapEvent) => void;
+    onprecompose?: (evt: RenderEvent) => void;
+    onpropertychange?: (evt: ObjectEvent) => void;
+    onrendercomplete?: (evt: RenderEvent) => void;
+    onsingleclick?: (evt: MapBrowserEvent) => void;
 }
 
 export interface MapProps extends MapEvents {
@@ -40,15 +35,16 @@ export interface MapProps extends MapEvents {
 
 export interface MapContextProps {
     maps: Map<string, olMap>;
+    registerMap: (map: olMap, id: string) => void;
 }
-const defaultMapContextProps: MapContextProps = {
-    maps: new Map(),
-}
-export const MapContext = React.createContext(defaultMapContextProps);
+const defaultMapContextProps = null;
 
-export const OlMap = (props: MapProps & {forwardedRef?: Ref<HTMLDivElement>}) => {
+export const MapContext = React.createContext<MapContextProps | null>(defaultMapContextProps);
+
+export const OlMap = (props: MapProps) => {
     const mapId = props.id || `map${getRandomInt(100000, 999999)}`;
-    const mapElementRef = props.forwardedRef || React.useRef<HTMLDivElement>(null);
+
+    const mapElementRef = React.useRef<HTMLDivElement>(null);
     
     const mapObj = new olMap({
         controls: props.initialMapOptions.controls,
@@ -58,7 +54,12 @@ export const OlMap = (props: MapProps & {forwardedRef?: Ref<HTMLDivElement>}) =>
         overlays: props.initialMapOptions.overlays,
     });
 
-    React.useEffect(() => {
+    const mapContext = React.useContext(MapContext);
+    if (mapContext) {
+        mapContext.registerMap(mapObj, mapId);
+    }
+
+    React.useLayoutEffect(() => {
         props.onchange && mapObj.on('change', props.onchange);
         props.onchangeLayerGroup && mapObj.on('change:layerGroup', props.onchangeLayerGroup);
         props.onchangeTarget && mapObj.on('change:target', props.onchangeTarget);
@@ -76,7 +77,9 @@ export const OlMap = (props: MapProps & {forwardedRef?: Ref<HTMLDivElement>}) =>
         props.onrendercomplete && mapObj.on('rendercomplete', props.onrendercomplete);
         props.onsingleclick && mapObj.on('singleclick', props.onsingleclick);
         
-        mapObj.setTarget(mapId);
+        if (mapElementRef.current) {
+            mapObj.setTarget(mapElementRef.current);
+        }
 
         return function cleanup() {
             mapObj.setTarget(undefined);
@@ -89,14 +92,3 @@ export const OlMap = (props: MapProps & {forwardedRef?: Ref<HTMLDivElement>}) =>
         </div>
     );
 };
-
-export const SingleMap = React.forwardRef<HTMLDivElement, MapProps>((props, ref) => (
-    <MapContext.Consumer>
-        {() => (
-            <OlMap {...props} forwardedRef={ref}>
-                {props.children}
-            </OlMap>
-        )}
-    </MapContext.Consumer>
-));
-SingleMap.displayName = 'SingleMap';
