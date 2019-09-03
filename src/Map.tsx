@@ -29,14 +29,14 @@ export interface MapEvents {
 }
 
 export interface MapProps extends MapEvents {
-    id?: string;
+    mapId?: string;
     children?: React.ReactNode;
     initialMapOptions: Omit<MapOptions, 'target'>;
 }
 
 
 export const OlMap = (props: MapProps) => {
-    const mapId = props.id || `map${getRandomInt(100000, 999999)}`;
+    const mapId = props.mapId || `map${getRandomInt(100000, 999999)}`;
 
     const mapElementRef = React.useRef<HTMLDivElement>(null);
     
@@ -82,7 +82,7 @@ export const OlMap = (props: MapProps) => {
     
     return (
         <CurrentMapContext.Provider value={{ map: mapObj }}>
-            <div id={mapId} ref={mapElementRef}>
+            <div ref={mapElementRef}>
                 {props.children}
             </div>
         </CurrentMapContext.Provider>
