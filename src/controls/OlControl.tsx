@@ -3,7 +3,8 @@ import olControlZoom, { Options as olZoomOptions } from 'ol/control/Zoom';
 import olMap from 'ol/Map';
 import { ObjectEvent } from 'ol/Object';
 
-import { MapContext, CurrentMapContext } from '../Map';
+import { MapContext } from "../MapContext";
+import { CurrentMapContext } from "../CurrentMapContext";
 
 export interface ControlEvents {
     onchange?: (evt: Event) => void;

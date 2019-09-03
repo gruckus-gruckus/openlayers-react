@@ -5,6 +5,8 @@ import { MapBrowserEvent, MapEvent } from 'ol';
 import { ObjectEvent } from 'ol/Object';
 import RenderEvent from 'ol/render/Event';
 import { getRandomInt } from './getRandomInt';
+import { CurrentMapContext } from './CurrentMapContext';
+import { MapContext } from './MapContext';
 
 export interface MapEvents {
     onchange?: (evt: Event) => void;
@@ -32,19 +34,6 @@ export interface MapProps extends MapEvents {
     initialMapOptions: Omit<MapOptions, 'target'>;
 }
 
-
-export interface CurrentMapContextProps {
-    map: olMap;
-}
-export const CurrentMapContext = React.createContext<CurrentMapContextProps | null>(null);
-
-export interface MapContextProps {
-    maps: Map<string, olMap>;
-    registerMap: (map: olMap, id: string) => void;
-}
-const defaultMapContextProps = null;
-
-export const MapContext = React.createContext<MapContextProps | null>(defaultMapContextProps);
 
 export const OlMap = (props: MapProps) => {
     const mapId = props.id || `map${getRandomInt(100000, 999999)}`;
