@@ -28,24 +28,28 @@ export interface MapEvents {
     onsingleclick?: (evt: MapBrowserEvent) => void;
 }
 
-export interface MapProps extends MapEvents {
+export interface MapProps extends MapEvents, React.HTMLAttributes<HTMLDivElement> {
     mapId?: string;
     children?: React.ReactNode;
     initialMapOptions: Omit<MapOptions, 'target'>;
 }
 
-
 export const OlMap = (props: MapProps) => {
-    const mapId = props.mapId || `map${getRandomInt(100000, 999999)}`;
+    const {
+        mapId = `map${getRandomInt(100000, 999999)}`,
+        children,
+        initialMapOptions,
+        ...divProps
+    } = props;
 
     const mapElementRef = React.useRef<HTMLDivElement>(null);
     
     const mapObj = new olMap({
-        controls: props.initialMapOptions.controls,
-        interactions: props.initialMapOptions.interactions,
-        layers: props.initialMapOptions.layers,
-        view: props.initialMapOptions.view,
-        overlays: props.initialMapOptions.overlays,
+        controls: initialMapOptions.controls,
+        interactions: initialMapOptions.interactions,
+        layers: initialMapOptions.layers,
+        view: initialMapOptions.view,
+        overlays: initialMapOptions.overlays,
     });
 
     const mapContext = React.useContext(MapContext);
@@ -78,12 +82,12 @@ export const OlMap = (props: MapProps) => {
         return function cleanup() {
             mapObj.setTarget(undefined);
         };
-    });
+    }, [mapElementRef]);
     
     return (
         <CurrentMapContext.Provider value={{ map: mapObj }}>
-            <div ref={mapElementRef}>
-                {props.children}
+            <div ref={mapElementRef} {...divProps}>
+                {children}
             </div>
         </CurrentMapContext.Provider>
     );

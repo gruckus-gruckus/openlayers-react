@@ -25,17 +25,10 @@
         "noFallthroughCasesInSwitch": true,
         "declaration": true,
         "strict": true,
-        "noEmit": true,
-        "baseUrl": "./",
-        "paths": {
-            "openlayers-react": ["./"]
-        }
     },
     "include": [
         "src/**/*.tsx",
         "src/**/*.ts",
-        "examples/**/*.ts",
-        "examples/**/*.tsx",
     ],
     "exclude": [
         "node_modules"
