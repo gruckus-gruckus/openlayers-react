@@ -1,5 +1,6 @@
 import React from 'react';
 import olControlZoom, { Options as olZoomOptions } from 'ol/control/Zoom';
+import olControl, { Options as olControlOptions } from 'ol/control/Control';
 import olMap from 'ol/Map';
 import { ObjectEvent } from 'ol/Object';
 
@@ -49,10 +50,41 @@ export function ZoomControl(props: ZoomControlProps) {
     return (<div ref={ctrlRef}></div>);
 }
 
-export const OlControl = () => {
-    // TODO: Use type guards, just have one control class
-    const divEle = React.createRef<HTMLDivElement>();
-    return (
-        <div ref={divEle}></div>
-    );
+export interface ControlProps<T extends olControl, O extends Omit<olControlOptions, 'target'>> {
+    controlType: { new(opts: O): T ;};
+    controlProps: O;
+    mapId?: string;
+};
+
+export function OlControl<T extends olControl, O>(props: ControlProps<T, O>) {
+
+    const mapCtx = React.useContext(MapContext);
+    const currentMapCtx = React.useContext(CurrentMapContext);
+    const ctrlRef = React.useRef<HTMLDivElement>(null);
+
+    let matchingMap: olMap | undefined;
+    if (mapCtx && props.mapId) {
+        matchingMap = mapCtx.maps.get(props.mapId);
+    } else if (currentMapCtx) {
+        matchingMap = currentMapCtx.map;
+    }
+
+    React.useLayoutEffect(() => {
+        const ctrlInstace = new props.controlType({
+            ...props.controlProps,
+            target: undefined,
+        });
+    
+        if (matchingMap) {
+            matchingMap.addControl(ctrlInstace);
+        }
+        if (ctrlRef.current) {
+            ctrlInstace.setTarget(ctrlRef.current);
+        }
+
+        return () => {
+            matchingMap && matchingMap.removeControl(ctrlInstace);
+        };
+    }, [matchingMap]);
+    return (<div ref={ctrlRef}></div>);
 }

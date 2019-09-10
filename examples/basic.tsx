@@ -46,6 +46,6 @@ const mapOptions = {
         zoom: 4,
     }),
 };
-export const BasicMap = () => {
+export const BasicMapExample = () => {
     return (<OlMap initialMapOptions={mapOptions}></OlMap>)
 }
