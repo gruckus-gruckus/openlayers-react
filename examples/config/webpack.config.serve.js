@@ -53,7 +53,7 @@ module.exports = merge(baseConfig, {
         ],
     },
     devServer: {
-        contentBase: path.join(__dirname, '../'),
+        contentBase: path.join(__dirname, '..'),
         openPage: '/index.html',
         hot: true,
         headers: {

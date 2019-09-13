@@ -4,14 +4,14 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 
 module.exports = {
+    context: path.resolve(__dirname, '../../'),
     entry: {
-        "app": "./ExampleApp.tsx",
+        "app": "./examples/ExampleApp.tsx",
     },
-    context: path.resolve(__dirname, '..'),
     output: {
         path: path.join(__dirname, "../dist")
     },
-    devtool: "source-map",
+    devtool: "cheap-module-eval-source-map",
     plugins: [
         new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
@@ -24,7 +24,7 @@ module.exports = {
     resolve: {
         extensions: [...DEFAULT_EXTENSIONS, '.tsx', '.ts', '.js', '.jsx', '.mjs', '.ejs'],
         alias: {
-            'openlayers-react': path.resolve(__dirname, '../../'),
+            'openlayers-react': path.resolve(__dirname, '../../src'),
             react: path.resolve('./node_modules/react'),
             ol: path.resolve('./node_modules/ol'),
         }

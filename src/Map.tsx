@@ -39,6 +39,24 @@ export const OlMap = (props: MapProps) => {
         mapId = `map${getRandomInt(100000, 999999)}`,
         children,
         initialMapOptions,
+
+        onchange,
+        onchangeLayerGroup,
+        onchangeTarget,
+        onchangeView,
+        onclick,
+        ondblclick,
+        onmovestart,
+        onmoveend,
+        onpointerdrag,
+        onpointermove,
+        onpostcompose,
+        onpostrender,
+        onprecompose,
+        onpropertychange,
+        onrendercomplete,
+        onsingleclick,
+
         ...divProps
     } = props;
 
@@ -58,22 +76,22 @@ export const OlMap = (props: MapProps) => {
     }
 
     React.useLayoutEffect(() => {
-        props.onchange && mapObj.on('change', props.onchange);
-        props.onchangeLayerGroup && mapObj.on('change:layerGroup', props.onchangeLayerGroup);
-        props.onchangeTarget && mapObj.on('change:target', props.onchangeTarget);
-        props.onchangeView && mapObj.on('change:view', props.onchangeView);
-        props.onclick && mapObj.on('click', props.onclick);
-        props.ondblclick && mapObj.on('dblclick', props.ondblclick);
-        props.onmovestart && mapObj.on('movestart', props.onmovestart);
-        props.onmoveend && mapObj.on('moveend', props.onmoveend);
-        props.onpointerdrag && mapObj.on('pointerdrag', props.onpointerdrag);
-        props.onpointermove && mapObj.on('pointermove', props.onpointermove);
-        props.onpostcompose && mapObj.on('postcompose', props.onpostcompose);
-        props.onpostrender && mapObj.on('postrender', props.onpostrender);
-        props.onprecompose && mapObj.on('precompose', props.onprecompose);
-        props.onpropertychange && mapObj.on('propertychange', props.onpropertychange);
-        props.onrendercomplete && mapObj.on('rendercomplete', props.onrendercomplete);
-        props.onsingleclick && mapObj.on('singleclick', props.onsingleclick);
+        onchange && mapObj.on('change', onchange);
+        onchangeLayerGroup && mapObj.on('change:layerGroup', onchangeLayerGroup);
+        onchangeTarget && mapObj.on('change:target', onchangeTarget);
+        onchangeView && mapObj.on('change:view', onchangeView);
+        onclick && mapObj.on('click', onclick);
+        ondblclick && mapObj.on('dblclick', ondblclick);
+        onmovestart && mapObj.on('movestart', onmovestart);
+        onmoveend && mapObj.on('moveend', onmoveend);
+        onpointerdrag && mapObj.on('pointerdrag', onpointerdrag);
+        onpointermove && mapObj.on('pointermove', onpointermove);
+        onpostcompose && mapObj.on('postcompose', onpostcompose);
+        onpostrender && mapObj.on('postrender', onpostrender);
+        onprecompose && mapObj.on('precompose', onprecompose);
+        onpropertychange && mapObj.on('propertychange', onpropertychange);
+        onrendercomplete && mapObj.on('rendercomplete', onrendercomplete);
+        onsingleclick && mapObj.on('singleclick', onsingleclick);
         
         if (mapElementRef.current) {
             mapObj.setTarget(mapElementRef.current);
