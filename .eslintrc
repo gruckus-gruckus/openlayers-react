@@ -42,7 +42,7 @@
         "import/resolver": {
           "alias": {
             "map": [
-              ["openlayers-react", "./"] 
+              ["openlayers-react", "./src"] 
             ],
           }
         }
