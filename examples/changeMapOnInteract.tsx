@@ -62,6 +62,11 @@ export function ChangeMapOnInteractExample() {
                                         newView.setCenter(transform(center, oldView.getProjection(), newView.getProjection()));
                                     }
                                     map.setView(newView);
+                                    oldView.dispose();
+                                    map.render();
+                                    const layer = map.getLayers().item(0) as TileLayer;
+                                    const source = layer.getSource() as TileWMS;
+                                    source.refresh();
                                 }
                             }}>
                                 <option value={"EPSG:4326"}>EPSG:4326</option>
