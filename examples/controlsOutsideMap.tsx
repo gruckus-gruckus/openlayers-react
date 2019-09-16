@@ -17,7 +17,7 @@ export function ControlsOutsideMapExample() {
     return (
         <MapContext.Provider value={{ maps: maps, registerMap: registerMap }}>
             <div style={{ position: "relative", width: '100%', height: '100%', }}>
-                <div style={{ position: "absolute", width: '100%', height: '100%', }}>
+                <div style={{ position: "absolute", width: '100%', height: '100%', zIndex: 1, }}>
                     <OlMap mapId={'customMap'} initialMapOptions={{
                         controls: [],
                         layers: [
@@ -41,10 +41,10 @@ export function ControlsOutsideMapExample() {
                         }),
                     }} />
                 </div>
-                <div style={{ position: "absolute", width: '100%', height: '100%', zIndex: -1 }}>
-                    <Control mapId={'customMap'} controlType={Zoom} controlProps={{}} style={{ zIndex: 2, }} />
-                    <Control mapId={'customMap'} controlType={ZoomSlider} controlProps={{}} style={{ zIndex: 2, }} />
-                    <Control mapId={'customMap'} controlType={MultiZoomCustomControl} controlProps={{ zoomButtons: [1, 4, 7, 11] }} style={{ zIndex: 2, }} />
+                <div style={{ position: "absolute", width: '100%', height: '100%', pointerEvents: "none", zIndex: 1, }}>
+                    <Control mapId={'customMap'} controlType={Zoom} controlProps={{}} style={{ zIndex: 2, pointerEvents: "initial" }} />
+                    <Control mapId={'customMap'} controlType={ZoomSlider} controlProps={{}} style={{ zIndex: 2, pointerEvents: "initial", }} />
+                    <Control mapId={'customMap'} controlType={MultiZoomCustomControl} controlProps={{ zoomButtons: [1, 4, 7, 11] }} style={{ zIndex: 2, pointerEvents: "initial", }} />
                 </div>
             </div>
         </MapContext.Provider>

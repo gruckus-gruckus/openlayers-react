@@ -5,7 +5,6 @@ import olMap from 'ol/Map';
 import { ObjectEvent } from 'ol/Object';
 import RenderEvent from 'ol/render/Event';
 
-// import { getRandomInt } from './getRandomInt';
 import { CurrentMapContext } from './CurrentMapContext';
 import { MapContext } from './MapContext';
 
@@ -37,7 +36,7 @@ export interface MapProps extends MapEvents, React.HTMLAttributes<HTMLDivElement
 
 export const OlMap = (props: MapProps) => {
     const {
-        mapId,// = `map${getRandomInt(100000, 999999)}`,
+        mapId,
         children,
         initialMapOptions,
 

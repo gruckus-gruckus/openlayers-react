@@ -7,6 +7,11 @@ interface MultiZoomCustomControlOpts extends ControlOptions {
 export class MultiZoomCustomControl extends olControl {
     constructor(opts: MultiZoomCustomControlOpts) {
         const element = document.createElement('div');
+        element.style.position = 'absolute';
+        element.style.bottom = '0px';
+        element.style.left = '50%';
+        element.style.transform = 'translateX(-50%)';
+        
         super({ target: opts.target, element });
 
         opts.zoomButtons.forEach((zoomLevel, index) => {

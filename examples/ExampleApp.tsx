@@ -1,57 +1,17 @@
 import React, { ChangeEvent } from 'react';
 import ReactDOM from 'react-dom';
-import { createBrowserHistory } from 'history';
-import { BasicMapExample } from "./basic";
 import AppBar from '@material-ui/core/AppBar';
 import { makeStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 
 import 'ol/ol.css'
+
+import { BasicMapExample } from "./basic";
 import { MultipleMapsExample } from './multipleMaps';
 import { ChangeMapOnInteractExample } from './changeMapOnInteract';
 import { ControlsOutsideMapExample } from './controlsOutsideMap';
 import { NonOlControlExample } from './nonOlControlExample';
-
-class ErrorBoundary extends React.Component<{}, { hasError: boolean }> {
-    constructor(props: any) {
-      super(props);
-      this.state = { hasError: false };
-    }
-  
-    static getDerivedStateFromError(error: Error) {
-      // Update state so the next render will show the fallback UI.
-      return { hasError: true };
-    }
-  
-    componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-      // You can also log the error to an error reporting service
-      console.log(error, errorInfo);
-    }
-
-    clearError() {
-        this.setState(() => {
-            return { hasError: false };
-        });
-    }
-  
-    render() {
-      if (this.state.hasError) {
-        // You can render any custom fallback UI
-        return (
-            <div>
-                <h3>Something went wrong.</h3>
-                <button onClick={() => { this.clearError(); }}>Try again</button>
-            </div>
-        );
-      }
-  
-      return this.props.children; 
-    }
-}
-  
-  
-const history = createBrowserHistory();
 
 enum ExampleType {
     Basic,
@@ -83,7 +43,7 @@ function RootComponent() {
         setValue(newValue);
     }
 
-    let TabPanel;
+    let TabPanel = null;
     switch (value) {
         case ExampleType.Basic:
             TabPanel = <BasicMapExample />;
@@ -113,11 +73,9 @@ function RootComponent() {
                     <Tab label="Multiple maps demo" value={ExampleType.MultipleMaps} />
                 </Tabs>
             </AppBar>
-            <ErrorBoundary>
-                <div className={classes.content}>
-                    {TabPanel}
-                </div>
-            </ErrorBoundary>
+            <div className={classes.content}>
+                {TabPanel}
+            </div>
         </div>
     )
 }
