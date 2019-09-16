@@ -4,17 +4,13 @@ import { createBrowserHistory } from 'history';
 import { BasicMapExample } from "./basic";
 import AppBar from '@material-ui/core/AppBar';
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
 
 import 'ol/ol.css'
 import { MultipleMapsExample } from './multipleMaps';
 import { ChangeMapOnInteractExample } from './changeMapOnInteract';
 import { ControlsOutsideMapExample } from './controlsOutsideMap';
-import { CustomControlsExample } from './customControls';
 import { NonOlControlExample } from './nonOlControlExample';
 
 class ErrorBoundary extends React.Component<{}, { hasError: boolean }> {
@@ -70,7 +66,13 @@ const useStyles = makeStyles(theme => ({
     root: {
       flexGrow: 1,
       backgroundColor: theme.palette.background.paper,
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%',
     },
+    content: {
+        height: '100%',
+    }
 }));
 
 function RootComponent() {
@@ -88,9 +90,6 @@ function RootComponent() {
             break;
         case ExampleType.ControlOutsideMap:
             TabPanel = <ControlsOutsideMapExample />;
-            break;
-        case ExampleType.CustomControls:
-            TabPanel = <CustomControlsExample />;
             break;
         case ExampleType.ModifyMap:
             TabPanel = <ChangeMapOnInteractExample />;
@@ -110,13 +109,14 @@ function RootComponent() {
                     <Tab label="Basic demo" value={ExampleType.Basic} />
                     <Tab label="Modify map demo" value={ExampleType.ModifyMap} />
                     <Tab label="Controls outside map demo" value={ExampleType.ControlOutsideMap} />
-                    <Tab label="Custom Controls demo" value={ExampleType.CustomControls} />
                     <Tab label="Non-Ol control demo" value={ExampleType.NonOlControlExample} />
                     <Tab label="Multiple maps demo" value={ExampleType.MultipleMaps} />
                 </Tabs>
             </AppBar>
             <ErrorBoundary>
-                {TabPanel}
+                <div className={classes.content}>
+                    {TabPanel}
+                </div>
             </ErrorBoundary>
         </div>
     )

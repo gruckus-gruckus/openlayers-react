@@ -28,19 +28,15 @@ const mapOptions = {
             source: new TileWMS({
                 url: 'https://wms.geo.admin.ch/',
                 crossOrigin: 'anonymous',
-                attributions: '© <a href="http://www.geo.admin.ch/internet/geoportal/' +
-                    'en/home.html">Pixelmap 1:1000000 / geo.admin.ch</a>',
+                attributions: '© <a href="http://www.geo.admin.ch/internet/geoportal/en/home.html">Pixelmap 1:1000000 / geo.admin.ch</a>',
                 params: {
-                  'LAYERS': 'ch.swisstopo.pixelkarte-farbe-pk1000.noscale',
-                  'FORMAT': 'image/jpeg'
+                    'LAYERS': 'ch.swisstopo.pixelkarte-farbe-pk1000.noscale',
+                    'FORMAT': 'image/jpeg'
                 },
                 serverType: 'mapserver'
             }),
-            preload: 3,
         }),
     ],
-    loadTilesWhileInteracting: true,
-    loadTilesWhileAnimating: true,
     view: new OlView({
         center: [0, 0],
         zoom: 4,

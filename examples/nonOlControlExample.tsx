@@ -60,7 +60,7 @@ const mapOptions = {
 export function NonOlControlExample() {
     return (
         <OlMap initialMapOptions={mapOptions}>
-            <ReactFullScreenControl />
+            <div style={{ position: "absolute", zIndex: 1 }}><ReactFullScreenControl /></div>
         </OlMap>
     );
 }

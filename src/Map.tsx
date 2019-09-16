@@ -1,10 +1,11 @@
 import React from 'react';
-import olMap from 'ol/Map';
 import { MapOptions } from 'ol/PluggableMap';
 import { MapBrowserEvent, MapEvent } from 'ol';
+import olMap from 'ol/Map';
 import { ObjectEvent } from 'ol/Object';
 import RenderEvent from 'ol/render/Event';
-import { getRandomInt } from './getRandomInt';
+
+// import { getRandomInt } from './getRandomInt';
 import { CurrentMapContext } from './CurrentMapContext';
 import { MapContext } from './MapContext';
 
@@ -36,7 +37,7 @@ export interface MapProps extends MapEvents, React.HTMLAttributes<HTMLDivElement
 
 export const OlMap = (props: MapProps) => {
     const {
-        mapId = `map${getRandomInt(100000, 999999)}`,
+        mapId,// = `map${getRandomInt(100000, 999999)}`,
         children,
         initialMapOptions,
 
@@ -71,11 +72,11 @@ export const OlMap = (props: MapProps) => {
     });
 
     const mapContext = React.useContext(MapContext);
-    if (mapContext) {
+    if (mapId && mapContext) {
         mapContext.registerMap(mapObj, mapId);
     }
 
-    React.useLayoutEffect(() => {
+    React.useEffect(() => {
         onchange && mapObj.on('change', onchange);
         onchangeLayerGroup && mapObj.on('change:layerGroup', onchangeLayerGroup);
         onchangeTarget && mapObj.on('change:target', onchangeTarget);
