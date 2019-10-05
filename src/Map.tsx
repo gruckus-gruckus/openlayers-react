@@ -1,6 +1,7 @@
 import React from 'react';
 import { MapOptions } from 'ol/PluggableMap';
-import { MapBrowserEvent, MapEvent } from 'ol';
+import MapBrowserEvent from 'ol/MapBrowserEvent';
+import MapEvent from 'ol/MapEvent';
 import olMap from 'ol/Map';
 import { ObjectEvent } from 'ol/Object';
 import RenderEvent from 'ol/render/Event';
