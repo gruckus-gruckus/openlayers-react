@@ -1,53 +1,113 @@
 import React from 'react';
-import OlMap from 'ol/Map';
-import OlView from 'ol/View';
-import { Coordinate as OlCoordinate } from 'ol/coordinate';
-import OlControl from 'ol/control/Control';
-import OlCollection from 'ol/Collection';
-import OlBaseLayer from 'ol/layer/Base';
-import OlInteraction from 'ol/interaction/Interaction';
-import OlLayerGroup from 'ol/layer/Group';
-import OlOverlay from 'ol/Overlay';
+import { MapOptions } from 'ol/PluggableMap';
+import MapBrowserEvent from 'ol/MapBrowserEvent';
+import MapEvent from 'ol/MapEvent';
+import olMap from 'ol/Map';
+import { ObjectEvent } from 'ol/Object';
+import RenderEvent from 'ol/render/Event';
 
-export function getRandomInt(min: number, max: number): number {
-    const fmin = Math.ceil(min);
-    const fmax = Math.floor(max);
-    return Math.floor(Math.random() * (fmax - fmin)) + fmin;
+import { CurrentMapContext } from './CurrentMapContext';
+import { MapContext } from './MapContext';
+
+export interface MapEvents {
+    onchange?: (evt: Event) => void;
+    onchangeLayerGroup?: (evt: ObjectEvent) => void;
+    onchangeSize?: (evt: ObjectEvent) => void;
+    onchangeTarget?: (evt: ObjectEvent) => void;
+    onchangeView?: (evt: ObjectEvent) => void;
+    onclick?: (evt: MapBrowserEvent) => void;
+    ondblclick?: (evt: MapBrowserEvent) => void;
+    onmovestart?: (evt: MapEvent) => void;
+    onmoveend?: (evt: MapEvent) => void;
+    onpointerdrag?: (evt: MapBrowserEvent) => void;
+    onpointermove?: (evt: MapBrowserEvent) => void;
+    onpostcompose?: (evt: RenderEvent) => void;
+    onpostrender?: (evt: MapEvent) => void;
+    onprecompose?: (evt: RenderEvent) => void;
+    onpropertychange?: (evt: ObjectEvent) => void;
+    onrendercomplete?: (evt: RenderEvent) => void;
+    onsingleclick?: (evt: MapBrowserEvent) => void;
 }
 
-export interface MapProps {
-    id?: string;
-    children: React.ReactNode;
-    initialZoom: number;
-    initialCenter: OlCoordinate;
-    controls?: OlCollection<OlControl> | OlControl[];
-    interactions?: OlCollection<OlInteraction> | OlInteraction[];
-    layers?: OlBaseLayer[] | OlCollection<OlBaseLayer> | OlLayerGroup;
-    overlays?: OlCollection<OlOverlay> | OlOverlay[];
+export interface MapProps extends MapEvents, React.HTMLAttributes<HTMLDivElement> {
+    mapId?: string;
+    children?: React.ReactNode;
+    initialMapOptions: Omit<MapOptions, 'target'>;
 }
 
-export function Map(props: MapProps) {
-    const mapId = props.id || `map${getRandomInt(100000, 999999)}`;
-    const mapElement = React.useRef(null);
-    React.useEffect(() => {
-        const olMap = new OlMap({
-            controls: props.controls,
-            interactions: props.interactions,
-            layers: props.layers,
-            view: new OlView({
-                center: props.initialCenter,
-                zoom: props.initialZoom,
-            }),
-            target: mapId,
-            overlays: props.overlays,
-        })
-        return function cleanup() {
-            olMap.setTarget(undefined);
-        };
+export const OlMap = (props: MapProps) => {
+    const {
+        mapId,
+        children,
+        initialMapOptions,
+
+        onchange,
+        onchangeLayerGroup,
+        onchangeTarget,
+        onchangeView,
+        onclick,
+        ondblclick,
+        onmovestart,
+        onmoveend,
+        onpointerdrag,
+        onpointermove,
+        onpostcompose,
+        onpostrender,
+        onprecompose,
+        onpropertychange,
+        onrendercomplete,
+        onsingleclick,
+
+        ...divProps
+    } = props;
+
+    const mapElementRef = React.useRef<HTMLDivElement>(null);
+    
+    const mapObj = new olMap({
+        controls: initialMapOptions.controls,
+        interactions: initialMapOptions.interactions,
+        layers: initialMapOptions.layers,
+        view: initialMapOptions.view,
+        overlays: initialMapOptions.overlays,
     });
+
+    const mapContext = React.useContext(MapContext);
+    if (mapId && mapContext) {
+        mapContext.registerMap(mapObj, mapId);
+    }
+
+    React.useEffect(() => {
+        onchange && mapObj.on('change', onchange);
+        onchangeLayerGroup && mapObj.on('change:layerGroup', onchangeLayerGroup);
+        onchangeTarget && mapObj.on('change:target', onchangeTarget);
+        onchangeView && mapObj.on('change:view', onchangeView);
+        onclick && mapObj.on('click', onclick);
+        ondblclick && mapObj.on('dblclick', ondblclick);
+        onmovestart && mapObj.on('movestart', onmovestart);
+        onmoveend && mapObj.on('moveend', onmoveend);
+        onpointerdrag && mapObj.on('pointerdrag', onpointerdrag);
+        onpointermove && mapObj.on('pointermove', onpointermove);
+        onpostcompose && mapObj.on('postcompose', onpostcompose);
+        onpostrender && mapObj.on('postrender', onpostrender);
+        onprecompose && mapObj.on('precompose', onprecompose);
+        onpropertychange && mapObj.on('propertychange', onpropertychange);
+        onrendercomplete && mapObj.on('rendercomplete', onrendercomplete);
+        onsingleclick && mapObj.on('singleclick', onsingleclick);
+        
+        if (mapElementRef.current) {
+            mapObj.setTarget(mapElementRef.current);
+        }
+
+        return function cleanup() {
+            mapObj.setTarget(undefined);
+        };
+    }, [mapElementRef]);
+    
     return (
-        <div id={mapId} ref={mapElement}>
-            {props.children}
-        </div>
+        <CurrentMapContext.Provider value={{ map: mapObj }}>
+            <div ref={mapElementRef} {...divProps}>
+                {children}
+            </div>
+        </CurrentMapContext.Provider>
     );
-}
+};

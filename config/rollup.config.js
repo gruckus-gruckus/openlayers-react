@@ -27,7 +27,9 @@ export default (async () => ({
             extensions: [...DEFAULT_EXTENSIONS, '.ts', '.tsx', '.js', '.mjs', '.jsx', '.ejs'],
             modulesOnly: false
         }),*/
-        typescript(null),
+        typescript({
+            tsconfig: "./tsconfig.lib.json"
+        }),
         babel({
             sourceMaps: true,
             inputSourceMap: true,
