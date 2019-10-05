@@ -12,15 +12,6 @@ module.exports = {
         path: path.join(__dirname, "../dist")
     },
     devtool: "cheap-module-eval-source-map",
-    plugins: [
-        new MiniCssExtractPlugin({
-            // Options similar to the same options in webpackOptions.output
-            // all options are optional
-            filename: '[name].css',
-            chunkFilename: '[id].css',
-            ignoreOrder: false, // Enable to remove warnings about conflicting order
-        }),
-    ],
     resolve: {
         extensions: [...DEFAULT_EXTENSIONS, '.tsx', '.ts', '.js', '.jsx', '.mjs', '.ejs'],
         alias: {
