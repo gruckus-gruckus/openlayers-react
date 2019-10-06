@@ -1,3 +1,10 @@
+.eslintcache
+.rpt2_cache
 .idea
+.tmp
+.vscode
 tsconfig.json
-node_modules
+tsconfig.lib.json
+yarn.lock
+yarn-error.log
+
