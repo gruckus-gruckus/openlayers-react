@@ -1,8 +1,12 @@
 {
   "name": "openlayers-react",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "OpenLayer React Components",
-  "private": true,
+  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/awexfwex/openlayers-react"
+  },
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
